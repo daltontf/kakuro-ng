@@ -1,0 +1,31 @@
+table.selected {
+    background-color: #DDF;
+    
+}
+
+table.blocked {
+    background-color: #000;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+}
+
+td {
+    font-size: 8pt;
+    padding: 0px;  
+}
+
+td.onlyone {
+    font-size: 24pt;
+    text-align: center;    
+}
+
+input[type="text"] {
+    width: 20px;
+}
+
+table.selected input[type="text"] {
+    background-color: #DDF;
+}
