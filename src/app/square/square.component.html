@@ -3,19 +3,19 @@
         <td *ngIf="!blocked">
             <table>
                 <tr *ngFor="let row of [0,1,2]">
-                    <td [ngClass]="{onlyone: onlyOnePossibility()}" *ngFor="let col of [0,1,2]">
-                        <span>{{ displayPossibility(row * 3 + col + 1) }}</span>
+                    <td [ngClass]="{onlyone: onePossibility() }" *ngFor="let col of [0,1,2]">
+                        <span [ngClass]="{error: dupPossibility }">{{ displayPossibility(row * 3 + col + 1) }}</span>
                     </td>
                 </tr>
             </table>
         </td>
         <td *ngIf="hasRight" style="text-align:right">
-            <input type="text" maxlength="2" [(ngModel)]="sumRight" (focus)="select()"/>
+            <input type="text" [ngClass]="{ error: sumRightError }" maxlength="2" [(ngModel)]="sumRight" (focus)="select()"/>
         </td>
     </tr>
     <tr *ngIf="hasDown">
         <td colspan="2" style="text-align:center; vertical-align: bottom;">
-            <input type="text" maxlength="2" [(ngModel)]="sumDown" (focus)="select()"/>
+            <input type="text" [ngClass]="{ error: sumDownError }" maxlength="2" [(ngModel)]="sumDown" (focus)="select()"/>
         </td>
     </tr>
 </table>

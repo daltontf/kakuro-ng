@@ -22,8 +22,16 @@ td.onlyone {
     text-align: center;    
 }
 
+span.error {
+    color: #F00;   
+}
+
 input[type="text"] {
     width: 20px;
+}
+
+input[type="text"].error {
+    background-color: #F88;
 }
 
 table.selected input[type="text"] {

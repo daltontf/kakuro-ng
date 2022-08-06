@@ -5,5 +5,12 @@
     </td>
   </tr>    
 </table>
-<button (click)="persist()">Save</button>
-<button (click)="restore()">Restore</button>
+<button [disabled]="!currentPuzzleName" (click)="persist()">Save</button>
+<button [disabled]="!currentPuzzleName" (click)="restore()">Restore</button>
+<input type="text"  list="puzzleNames" [(ngModel)]="currentPuzzleName" >
+<datalist id="puzzleNames">
+<option *ngFor="let puzzleName of puzzleNames" [value]="puzzleName" >{{puzzleName}}</option> -->
+</datalist>
+<button (click)="squaresService.computePossibilities()">Compute</button>
+<button (click)="squaresService.validateSums()">Validate</button>
+<button (click)="squaresService.clearPossibilities()">Clear</button>

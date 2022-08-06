@@ -1,3 +1,4 @@
+import { formatPercent } from '@angular/common';
 import { Component, OnInit, Input, BootstrapOptions } from '@angular/core';
 
 import { SquaresService } from '../squares.service';
@@ -12,12 +13,17 @@ export class SquareComponent implements OnInit {
   @Input() public row: number;
   @Input() public col: number;
 
-  public possibilities: Array<boolean> = this.emptyPossibilities();
+  public possibilities: boolean[] = [];
   public selected: boolean = false;
   public blocked: boolean = false;
   
   public hasRight: boolean = false;
   public hasDown: boolean = false;
+
+  public sumDownError: boolean = false;
+  public sumRightError: boolean = false;
+
+  public dupPossibility = false;
 
   public sumRight: string = "";
 
@@ -27,29 +33,25 @@ export class SquareComponent implements OnInit {
     this.row = 0;
     this.col = 0;
   }
-
-  emptyPossibilities():Array<boolean> {
-    return [false, false, false, false, false, false, false, false, false, false];
-  }
-
+ 
   displayPossibility(value: number) {
-    return this.possibilities[value] ? value : "";
+    return this.possibilities ? this.possibilities[value] ? value : "" : "";
   }
 
-  onlyOnePossibility() {
+  onePossibility():number | undefined {
     if (!this.blocked) {
-      var foundOne = false;
-      for (let i = 0; i < 10; i++) {
-        if (this.possibilities[i]) {
-          if (foundOne) {
-            return false;
+      var foundOne = undefined;
+      for (let i = 1; i < 10; i++) {
+        if (this.possibilities && this.possibilities[i]) {
+          if (!foundOne) {
+            foundOne = i;
+          } else {
+            return undefined;
           }
-          foundOne = true;
         }
       }
-      return foundOne;
     }
-    return false; 
+    return foundOne; 
   } 
 
   select() {
@@ -62,7 +64,7 @@ export class SquareComponent implements OnInit {
 
   togglePossibility(keyCode: number) {
     if (!this.blocked) {
-      this.possibilities[keyCode] = !this.possibilities[keyCode];
+      this.possibilities[keyCode] = this.possibilities[keyCode] ? !this.possibilities[keyCode] : true;
     }
   }
 
@@ -73,7 +75,6 @@ export class SquareComponent implements OnInit {
     } else {
       this.hasRight = false;
       this.hasDown = false;
-      this.possibilities = this.emptyPossibilities();
     }  
     this.squaresService.updateSums();
   }
@@ -89,9 +90,25 @@ export class SquareComponent implements OnInit {
 
   restore(state:any) {
     this.blocked = state.blocked;
+    if (!state.blocked) {
+      this.hasRight = false;
+      this.hasDown = false;
+    }
     this.sumRight = state.sumRight;
     this.sumDown = state.sumDown;
     this.possibilities = state.possibilities || new Set<number>()
+  }
+
+  mergePossibilities(possibilities:number[]) {
+    if (!this.onePossibility()) {
+      for (let i = 1; i < 10; i++) {
+        if (this.possibilities[i] == undefined) {
+          this.possibilities[i] = possibilities.includes(i);
+        } else {
+          this.possibilities[i] &&= possibilities.includes(i);
+        }
+      }   
+    }
   }
 
   ngOnInit(): void {

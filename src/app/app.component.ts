@@ -10,7 +10,11 @@ import { SquaresService } from './squares.service';
 export class AppComponent implements AfterViewInit {
   title = 'Kakuro';
 
-  constructor(private squaresService:SquaresService) {  }
+  puzzleNames: string[] = [];
+
+  currentPuzzleName: string = "";
+
+  constructor(public squaresService:SquaresService) {  }
 
   @HostListener('document:keydown', ['$event'])
   onKey(event: KeyboardEvent) {
@@ -18,15 +22,22 @@ export class AppComponent implements AfterViewInit {
   } 
 
   ngAfterViewInit() {    
-    this.squaresService.updateSums();
+    this.squaresService.updateSums();   
+    this.puzzleNames = JSON.parse(localStorage.getItem("puzzleNames") ?? "[]");
   }
 
   persist() {
-    localStorage.setItem("puzzle", JSON.stringify(this.squaresService.persistable()))
+    if (confirm("Save '" + this.currentPuzzleName + "' ?")) {
+      if (!this.puzzleNames.includes(this.currentPuzzleName)) {
+        this.puzzleNames.push(this.currentPuzzleName);
+      }
+      localStorage.setItem("puzzleNames",  JSON.stringify(this.puzzleNames));
+      localStorage.setItem(this.currentPuzzleName, JSON.stringify(this.squaresService.persistable()));
+    }
   }
 
   restore() {
-    var persisted = localStorage.getItem("puzzle");
+    var persisted = localStorage.getItem(this.currentPuzzleName);
     if (persisted) {
       this.squaresService.restore(JSON.parse(persisted));
     }
