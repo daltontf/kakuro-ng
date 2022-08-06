@@ -1,4 +1,5 @@
 import { NgIf } from '@angular/common';
+import { ThisReceiver } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { UrlSerializer } from '@angular/router';
 
@@ -171,6 +172,7 @@ export class SquaresService {
   }
 
   updateSums() {
+    if (!this.squareComponents[0][0]) { return; } // happens in test
     for (let rc = 0; rc < 10; rc++) {
       this.squareComponents[rc][0].blocked = true;
       this.squareComponents[0][rc].blocked = true;
