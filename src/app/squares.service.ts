@@ -30,35 +30,37 @@ export class SquaresService {
     this.selectedSquare.selected = true;
   }
 
-  private compute(result: boolean[], usedDigits: boolean[], remaining:number, digits:number) {
+  private compute(result: boolean[], currentPath: number[], usedDigits: boolean[], remaining:number, digits:number) {
     if (digits == 1 ) {
       if (remaining < 10 && !usedDigits[remaining - 1]) {
+          currentPath.forEach( it => result[it - 1] = true);
           result[remaining - 1] = true;
       }
   } else {
-      for (var x = 1; x < Math.min(10, remaining); x++) {
+      for (var x = (currentPath[0] ?? 0) + 1, nextRemaining = remaining - x;
+           x < Math.min(10, nextRemaining);
+           x++, nextRemaining--) {
         if (!usedDigits[x - 1]) {
-          var nextRemaining = remaining - x;
-          usedDigits[x - 1] = true;
-          this.compute(result, usedDigits, nextRemaining, digits - 1);
-          usedDigits[x - 1] = false;
+          currentPath.push(x);
+          this.compute(result, currentPath, usedDigits, nextRemaining, digits - 1);
+          currentPath.pop();
         }
       }
     }
   }
 
   private computePossibility(number: number, digits: number, exclusions:number[]):number[] {
-    var arrayResult = new Array<number>;
+    var arrayResult: number[] = [];
 
-    var possibilities = new Array<boolean>();
+    var possibilities: boolean[] = [];
 
-    var excluded = new Array<boolean>();
+    var excluded:boolean[] = [];
 
     for (let i = 0; i < exclusions.length; i++) {
       excluded[exclusions[i] - 1] = true;
     }
 
-    this.compute(possibilities, excluded, number, digits);
+    this.compute(possibilities, [], excluded, number, digits);
 
     for (let i = 0; i < possibilities.length; i++) {
       if (possibilities[i]) {
