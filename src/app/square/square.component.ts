@@ -1,10 +1,15 @@
-import { formatPercent } from '@angular/common';
-import { Component, OnInit, Input, BootstrapOptions } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
 import { SquaresService } from '../squares.service';
+import { FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common'; // 1. Import NgClass directly
 
 @Component({
   selector: 'app-square',
+  standalone: true,
+    imports: [
+      FormsModule,
+      NgClass
+    ],
   templateUrl: './square.component.html',
   styleUrls: ['./square.component.css']
 })

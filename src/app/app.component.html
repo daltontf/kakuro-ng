@@ -1,15 +1,21 @@
 <table>
-  <tr *ngFor="let r of [0,1,2,3,4,5,6,7,8,9]">
-    <td *ngFor="let c of [0,1,2,3,4,5,6,7,8,9]">
-      <app-square [row]=r [col]=c></app-square>
+  @for (r of [0,1,2,3,4,5,6,7,8,9]; track r) {
+  <tr>
+    @for (c of [0,1,2,3,4,5,6,7,8,9]; track c) {
+    <td>
+      <app-square [row]="r" [col]="c"></app-square>
     </td>
+    }
   </tr>    
+}
 </table>
 <button [disabled]="!currentPuzzleName" (click)="persist()">Save</button>
 <button [disabled]="!currentPuzzleName" (click)="restore()">Restore</button>
 <input type="text"  list="puzzleNames" [(ngModel)]="currentPuzzleName" >
 <datalist id="puzzleNames">
-<option *ngFor="let puzzleName of puzzleNames" [value]="puzzleName" >{{puzzleName}}</option> -->
+@for (puzzleName of puzzleNames; track puzzleName) {
+  <option>{{puzzleName}}</option>
+}
 </datalist>
 <button (click)="squaresService.computePossibilities()">Compute</button>
 <button (click)="squaresService.validateSums()">Validate</button>

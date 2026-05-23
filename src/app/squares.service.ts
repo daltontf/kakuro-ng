@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ThisReceiver } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { UrlSerializer } from '@angular/router';

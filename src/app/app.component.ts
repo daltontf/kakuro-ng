@@ -1,9 +1,16 @@
 import { Component, HostListener, AfterViewInit} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { SquaresService } from './squares.service';
+import { SquareComponent } from './square/square.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    FormsModule, 
+    SquareComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
